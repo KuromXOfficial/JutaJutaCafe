@@ -563,3 +563,19 @@
     </script>
 </body>
 </html>
+        // --- FIXED GAME SYSTEM TICK LOOPS ---
+        setInterval(() => {
+          let basePassive = (inventory.cupcakes * 5) + (inventory.salmon * 500);
+          let prestigeBonusMultiplier = 1 + (goldenBadges * 0.5);
+          let rawIncome = Math.round(basePassive * prestigeBonusMultiplier);
+          
+          if (logisticCenterBuilt) {
+            rawIncome += 5000; 
+          }
+          
+          userCoins += rawIncome;
+          coinCountDisplay.textContent = Math.floor(userCoins).toLocaleString();
+
+          // ✨ FIXED: This line now saves your data every single second!
+          localStorage.setItem("jutaJutaCoins", userCoins);
+        }, 1000);
