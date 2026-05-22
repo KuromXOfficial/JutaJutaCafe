@@ -556,9 +556,9 @@
           });
           setTimeout(() => { if (body.contains(catEventBtn)) catEventBtn.remove(); }, 8000);
         }
-        setInterval(() => { spawnLuckyCat(); }, 30000);
+        setInterval(() => { spawnLuckyCat(); }, 30000
 
-                // --- FIXED GAME SYSTEM TICK LOOPS ---
+        // --- FIXED GAME SYSTEM TICK LOOPS ---
         setInterval(() => {
           let basePassive = (inventory.cupcakes * 5) + (inventory.salmon * 500);
           let prestigeBonusMultiplier = 1 + (goldenBadges * 0.5);
@@ -574,4 +574,10 @@
           // ✨ FIXED: This line now saves your data every single second!
           localStorage.setItem("jutaJutaCoins", userCoins);
         }, 1000);
+
+        // Initialize Engine
+        updateDisplay();
+    </script>
+</body>
+</html>
 
