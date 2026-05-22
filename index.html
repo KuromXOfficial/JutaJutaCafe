@@ -1,397 +1,261 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juta Juta Cafe Tycoon - Milestone Edition</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Juta Juta Cafe Tycoon</title>
     <style>
-        body {
-            background-color: #16192b;
-            color: #fff;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 20px;
-            padding-bottom: 60px;
-        }
-
-        .stats-bar {
-            border: 3px solid #ff6b00;
-            background-color: #111424;
-            border-radius: 15px;
-            padding: 15px;
-            max-width: 500px;
-            margin: 15px auto;
-            box-shadow: 0 0 15px rgba(255, 107, 0, 0.3);
-            text-align: left;
-        }
-
-        #work-btn {
-            background-color: #2ed573;
-            color: white;
-            border: none;
-            padding: 12px;
-            width: 100%;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 10px;
-            box-shadow: 0 4px #26af5f;
-        }
-        #work-btn:active:not([disabled]) {
-            transform: translateY(2px);
-            box-shadow: 0 2px #26af5f;
-        }
-
-        .shop-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 15px;
-        }
-
-        .shop-card {
-            background-color: #ffffff;
-            color: #222;
-            border-radius: 15px;
-            padding: 15px;
-            width: 200px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            text-align: center;
-            border: 2px solid #ddd;
-        }
-
-        .shop-card h2, .shop-card h3 {
-            font-size: 18px;
-            margin: 5px 0;
-        }
-
-        .shop-card p {
-            font-size: 12px;
-            color: #555;
-            margin: 8px 0;
-        }
-
-        .buy-btn, .sell-btn {
-            background-color: #0084ff;
-            color: white;
-            border: none;
-            padding: 10px;
-            width: 100%;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        .buy-btn:hover, .sell-btn:hover { opacity: 0.9; }
-
-        .cat-bg {
-            position: fixed; bottom: 10px; left: 10px; width: 60px; height: 60px;
-            background: url('https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=100&auto=format&fit=crop') no-repeat center/cover;
-            border-radius: 50%; opacity: 0.3; z-index: -1;
-        }
-        .cat-bg2 {
-            position: fixed; bottom: 10px; right: 10px; width: 60px; height: 60px;
-            background: url('https://images.unsplash.com/photo-1533738363-b7f9aef128ce?q=80&w=100&auto=format&fit=crop') no-repeat center/cover;
-            border-radius: 50%; opacity: 0.3; z-index: -1;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #f5f6fa; color: #2f3640; padding: 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; width: 100%; max-width: 500px; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(108,92,231,0.2); margin-bottom: 15px; }
+        .header h1 { font-size: 1.8rem; margin-bottom: 5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .stats-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 500px; margin-bottom: 15px; }
+        .stat-card { background: white; padding: 12px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #dcdde1; }
+        .stat-card.full-width { grid-column: span 2; background: #fff; border: 2px solid #6c5ce7; }
+        .stat-label { font-size: 0.8rem; color: #7f8c8d; text-transform: uppercase; font-weight: bold; margin-bottom: 3px; }
+        .stat-value { font-size: 1.4rem; font-weight: 700; color: #2f3640; }
+        .stat-card.full-width .stat-value { color: #6c5ce7; font-size: 1.8rem; }
+        .main-action { width: 100%; max-width: 500px; margin-bottom: 15px; }
+        .btn-work { width: 100%; background: #4cd137; color: white; border: none; padding: 18px; font-size: 1.3rem; font-weight: 700; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 12px rgba(76,209,55,0.3); transition: transform 0.1s; }
+        .btn-work:active { transform: scale(0.98); }
+        .section-title { width: 100%; max-width: 500px; font-size: 1.1rem; font-weight: 700; margin: 10px 0 8px 5px; color: #718093; text-transform: uppercase; letter-spacing: 0.5px; }
+        .scroll-container { width: 100%; max-width: 500px; display: flex; gap: 10px; overflow-x: auto; padding: 5px 5px 12px 5px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+        .scroll-container::-webkit-scrollbar { display: none; }
+        .shop-card { min-width: 155px; flex: 0 0 auto; background: white; padding: 12px; border-radius: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.06); border: 1px solid #dcdde1; display: flex; flex-direction: column; justify-content: space-between; }
+        .shop-item-title { font-size: 1rem; font-weight: 700; margin-bottom: 2px; }
+        .shop-item-cost { font-size: 0.85rem; color: #e84118; font-weight: bold; margin-bottom: 8px; }
+        .shop-item-owned { font-size: 0.8rem; color: #7f8c8d; margin-bottom: 10px; font-style: italic; }
+        .btn-buy { background: #00a8ff; color: white; border: none; padding: 8px; font-size: 0.9rem; font-weight: 700; border-radius: 8px; cursor: pointer; width: 100%; }
+        .btn-sell { background: #fbc531; color: #2f3640; border: none; padding: 8px; font-size: 0.9rem; font-weight: 700; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 5px; }
+        .btn-bulk { width: 100%; max-width: 500px; background: #e84118; color: white; border: none; padding: 14px; font-size: 1.1rem; font-weight: 700; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 10px rgba(232,65,24,0.2); margin-bottom: 15px; }
+        .upgrade-section { width: 100%; max-width: 500px; background: white; padding: 15px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1px solid #dcdde1; margin-bottom: 15px; }
+        .upgrade-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f5f6fa; }
+        .upgrade-row:last-child { border-bottom: none; }
+        .upgrade-info { flex: 1; padding-right: 10px; }
+        .upgrade-name { font-size: 0.95rem; font-weight: 700; }
+        .upgrade-desc { font-size: 0.75rem; color: #7f8c8d; margin-top: 2px; }
+        .btn-upgrade { background: #9c88ff; color: white; border: none; padding: 8px 12px; font-size: 0.85rem; font-weight: 700; border-radius: 8px; cursor: pointer; min-width: 90px; text-align: center; }
+        .btn-upgrade.purchased { background: #dcdde1; color: #7f8c8d; cursor: not-allowed; }
+        .btn-prestige { width: 100%; max-width: 500px; background: linear-gradient(135deg, #f53b57, #ef5777); color: white; border: none; padding: 16px; font-size: 1.2rem; font-weight: 700; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 12px rgba(245,59,87,0.25); margin-bottom: 25px; }
     </style>
 </head>
 <body>
 
-    <div class="stats-bar">
-      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-        <p style="margin:0; font-size: 18px; font-weight:bold;">Balance: <span id="coin-count">0</span> Juta Coins 🪙</p>
-        <p id="prestige-display" style="color: #ffca28; font-weight: bold; margin: 0;">🥇 Badges: 0</p>
-      </div>
-      <button id="work-btn">💼 Work at Café (+50 Coins)</button>
+    <div class="header">
+        <h1>Juta Juta Cafe</h1>
+        <p>Establish a Global Culinary Enterprise</p>
     </div>
 
-    <h2 id="shop-header" style="text-align: center; color: #fff; margin-top: 20px;">🛒 Buy Café Goods</h2>
-    <div class="shop-container">
-      <div class="shop-card">
-        <h2>Lucky Paw Latte ☕✨</h2>
-        <p>A magical espresso blend topped with a glowing, starlit foam paw print.</p>
-        <p><strong>Price: 100 Coins</strong></p>
-        <button class="buy-btn" data-item="Lucky Paw Latte ☕✨" data-price="100">BUY</button>
-      </div>
-
-      <div class="shop-card">
-        <h2>Star Dust Cupcake 🧁🌟</h2>
-        <p>A fluffy vanilla cupcake topped with cosmic space frosting.</p>
-        <p><strong>Price: 150 Coins</strong></p>
-        <button class="buy-btn" data-item="Star Dust Cupcake 🧁🌟" data-price="150">BUY</button>
-      </div>
+    <div class="stats-container">
+        <div class="stat-card full-width">
+            <div class="stat-label">Total Treasury Balance</div>
+            <div class="stat-value"><span id="coins">0</span></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Passive Yield Rate</div>
+            <div class="stat-value" style="color: #4cd137; font-size: 1.1rem;">+<span id="pps">0</span>/s</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Golden Cat Badges</div>
+            <div class="stat-value" style="color: #fbc531; font-size: 1.1rem;">⭐ <span id="badges">0</span></div>
+        </div>
     </div>
 
-    <div id="food-sector" class="shop-container" style="margin-top: 20px; display: none;">
-      <div class="shop-card" style="border: 2px solid #ff7675; background: rgba(255, 118, 117, 0.1); width: 220px;">
-        <h2 style="color: #ff7675;">Salam Salmon 🐟🔥</h2>
-        <p>Premium cosmic salmon seared over a starlight grill. Multiplies data points!</p>
-        <p><strong>Price: 25,000 Coins</strong></p>
-        <button class="buy-btn" data-item="Salam Salmon 🐟🔥" data-price="25000">BUY</button>
-      </div>
+    <div class="main-action">
+        <button class="btn-work" id="work-btn">Brew Espresso Manually</button>
     </div>
 
-    <h2 style="text-align: center; color: #2ecc71; margin-top: 30px;">💰 Wholesaler Market</h2>
-    <div class="stats-bar" style="background: rgba(46, 204, 113, 0.1); border: 2px dashed #2ecc71; text-align: center;">
-      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-        <button class="sell-btn" data-item="latte" data-payout="50" style="background:#2ecc71;">Sell 1 Latte (+50)</button>
-        <button class="sell-btn" data-item="cupcake" data-payout="75" style="background:#2ecc71;">Sell 1 Cupcake (+75)</button>
-        <button id="sell-salmon-btn" class="sell-btn" data-item="salmon" data-payout="12500" style="background:#e74c3c; display: none;">Sell 1 Salmon (+12.5k)</button>
-      </div>
-      
-      <hr style="margin: 20px 0; border: 0; border-top: 2px solid #2ecc71;">
-      
-      <h3 style="color: #3498db; margin-top: 0;">🛒 Juta Juta Supermarket</h3>
-      <p style="font-size: 13px;">Dump your entire backpack to the mega-stores for a massive 2x bonus payout!</p>
-      <button id="bulk-sell-btn" style="background-color: #3498db; color: white; border: none; padding: 15px; width: 100%; font-weight: bold; cursor: pointer; border-radius: 8px;">
-        BULK SELL EVERYTHING (2x Bonus!)
-      </button>
+    <div class="section-title">Produce & Commerce Hub</div>
+    <div class="scroll-container">
+        <div class="shop-card">
+            <div>
+                <div class="shop-item-title">☕ Premium Latte</div>
+                <div class="shop-item-cost">Cost: 100</div>
+                <div class="shop-item-owned">Stock: <span id="owned-lattes">0</span></div>
+            </div>
+            <div>
+                <button class="btn-buy" data-item="Latte" data-price="100">Buy (100)</button>
+                <button class="btn-sell" data-item="latte" data-payout="50">Sell (50)</button>
+            </div>
+        </div>
+        <div class="shop-card">
+            <div>
+                <div class="shop-item-title">🧁 Glazed Cupcake</div>
+                <div class="shop-item-cost">Cost: 500</div>
+                <div class="shop-item-owned">Stock: <span id="owned-cupcakes">0</span>/200</div>
+            </div>
+            <div>
+                <button class="btn-buy" data-item="Cupcake" data-price="500">Buy (500)</button>
+                <button class="btn-sell" data-item="cupcake" data-payout="300">Sell (300)</button>
+            </div>
+        </div>
+        <div class="shop-card">
+            <div>
+                <div class="shop-item-title">🐟 Premium Salmon</div>
+                <div class="shop-item-cost">Cost: 75,000</div>
+                <div class="shop-item-owned">Stock: <span id="owned-salmon">0</span>/50</div>
+            </div>
+            <div>
+                <button class="btn-buy" data-item="Salmon" data-price="75000">Buy (75k)</button>
+                <button class="btn-sell" data-item="salmon" data-payout="45000">Sell (45k)</button>
+            </div>
+        </div>
     </div>
 
-    <div id="p4-mega-facility-zone" class="stats-bar" style="margin-top: 20px; border-color: #f1c40f; background: rgba(241, 196, 15, 0.05); display: none;">
-      <h3 style="color: #f1c40f; text-align: center; margin-top: 0;">🏢 Prestige 4: Logistic Mega-Center</h3>
-      <p style="font-size: 12px; text-align: center; margin-bottom: 12px;">The ultimate distribution tower. Permanently grants an additional flat +5,000 Coins/sec passive income!</p>
-      <button id="p4-build-btn" style="width: 100%; border: none; padding: 12px; font-weight: bold; border-radius: 6px; cursor: pointer; background-color: #f1c40f; color: #111;">
-        🏗️ Establish Logistic Center (25,000,000 Coins)
-      </button>
+    <button class="btn-bulk" id="bulk-sell-btn">📦 Bulk Sell to Supermarket (2x Payout!)</button>
+
+    <div class="section-title">Strategic Upgrades & Automation</div>
+    <div class="upgrade-section">
+        <div class="upgrade-row">
+            <div class="upgrade-info">
+                <div class="upgrade-name">Automated Espresso Barista</div>
+                <div class="upgrade-desc">Generates 1 manual brew automatically every 5 seconds.</div>
+            </div>
+            <button class="btn-upgrade" id="barista-btn">Hire (250k)</button>
+        </div>
+        <div class="upgrade-row">
+            <div class="upgrade-info">
+                <div class="upgrade-name">Corporate General Manager</div>
+                <div class="upgrade-desc">Triples (3x) all payouts generated by Lucky Cat events.</div>
+            </div>
+            <button class="btn-upgrade" id="manager-btn">Hire (1M)</button>
+        </div>
+        <div class="upgrade-row">
+            <div class="upgrade-info">
+                <div class="upgrade-name">Industrial Baking Factory</div>
+                <div class="upgrade-desc">Research (50k) then Buy (1M) to expand Cupcake limits to 500.</div>
+            </div>
+            <button class="btn-upgrade" id="upgrade-btn">Research (50k)</button>
+        </div>
+        <div class="upgrade-row">
+            <div class="upgrade-info">
+                <div class="upgrade-name">Salmon Vault Facility</div>
+                <div class="upgrade-desc">Research (2M) then Buy (10M) to expand Salmon limits to 450.</div>
+            </div>
+            <button class="btn-upgrade" id="salmon-storage-btn">Research (2M)</button>
+        </div>
+        <div class="upgrade-row">
+            <div class="upgrade-info">
+                <div class="upgrade-name">Prestige 4 Logistics Center</div>
+                <div class="upgrade-desc">Establishes a passive supply line yielding a flat +5,000 Coins/sec.</div>
+            </div>
+            <button class="btn-upgrade" id="p4-build-btn">Build (25M)</button>
+        </div>
     </div>
 
-    <div class="stats-bar" style="margin-top: 20px;">
-      <h3>🔬 Café Upgrades & Expansion</h3>
-      <button id="upgrade-btn" style="background-color: #9b59b6; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; margin-bottom: 10px; width: 100%;">
-        🔬 Research Factory (50,000 Coins)
-      </button>
-      <button id="salmon-storage-btn" style="background-color: #d63031; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; margin-bottom: 10px; width: 100%; display: none;">
-        🐟 Research Salmon Storage Facility (2,000,000 Coins)
-      </button>
-      <button id="prestige-btn" style="width: 100%; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 16px;">
-        🌌 Cosmic Prestige Locked
-      </button>
-    </div>
-
-    <div class="stats-bar" style="margin-top: 20px;">
-      <h3>🐾 Staff Roster</h3>
-      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-        <button id="buy-barista" style="background-color: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer;">
-          ☕ Hire Barista Cat (250k Coins)<br><span style="font-size:11px;font-weight:normal;">Auto-works every 5s</span>
-        </button>
-        <button id="buy-manager" style="background-color: #e74c3c; color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer;">
-          👔 Hire Manager Cat (1M Coins)<br><span style="font-size:11px;font-weight:normal;">Triples event drops</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="cat-bg"></div>
-    <div class="cat-bg2"></div>
+    <div class="section-title">Universal Ascension</div>
+    <button class="btn-prestige" id="prestige-btn">Reset for Golden Cat Badge (Cost: 10,000,000)</button>
 
     <script>
-        // --- GAME VARIABLES ---
-        let userCoins = parseInt(localStorage.getItem("jutaJutaCoins")) || 53705;
-        let goldenBadges = parseInt(localStorage.getItem("goldenBadges")) || 3;
-
-        let inventory = JSON.parse(localStorage.getItem("cafeInventory")) || {
-          lattes: 21,
-          cupcakes: 143,
-          salmon: 0
-        };
-
-        let factoryResearched = localStorage.getItem("factoryResearched") === "true";
-        let factoryPurchased = localStorage.getItem("factoryPurchased") === "true";
+        // Game Engine State Variables
+        let userCoins = parseFloat(localStorage.getItem("jutaJutaCoins")) || 0;
+        let goldenBadges = parseInt(localStorage.getItem("goldenBadges")) || 0;
         
-        let salmonVaultResearched = localStorage.getItem("salmonVaultResearched") === "true";
-        let salmonVaultPurchased = localStorage.getItem("salmonVaultPurchased") === "true";
+        let inventory = { lattes: 0, cupcakes: 0, salmon: 0 };
+        try {
+          const savedInv = localStorage.getItem("cafeInventory");
+          if (savedInv) inventory = JSON.parse(savedInv);
+        } catch(e) { console.log(e); }
 
-        let logisticCenterBuilt = localStorage.getItem("logisticCenterBuilt") === "true";
+        let factoryResearched = false;
+        let factoryPurchased = false;
+        let salmonVaultResearched = false;
+        let salmonVaultPurchased = false;
+        let logisticCenterBuilt = false;
+        let hiredBarista = false;
+        let hiredManager = false;
 
-        let hiredBarista = localStorage.getItem("hiredBarista") === "true";
-        let hiredManager = localStorage.getItem("hiredManager") === "true";
-
-        // --- DOM ELEMENTS ---
-        const coinCountDisplay = document.getElementById("coin-count");
-        const prestigeDisplay = document.getElementById("prestige-display");
+        // UI Target Selectors
+        const coinCountDisplay = document.getElementById("coins");
+        const passiveIncomeDisplay = document.getElementById("pps");
+        const badgesDisplay = document.getElementById("badges");
         const workButton = document.getElementById("work-btn");
-        const buyButtons = document.querySelectorAll(".buy-btn");
-        const sellButtons = document.querySelectorAll(".sell-btn");
+        const buyButtons = document.querySelectorAll(".btn-buy");
+        const sellButtons = document.querySelectorAll(".btn-sell");
         const bulkSellBtn = document.getElementById("bulk-sell-btn");
         const upgradeButton = document.getElementById("upgrade-btn");
         const salmonStorageBtn = document.getElementById("salmon-storage-btn");
-        const p4FacilityZone = document.getElementById("p4-mega-facility-zone");
         const p4BuildBtn = document.getElementById("p4-build-btn");
+        const baristaButton = document.getElementById("barista-btn");
+        const managerButton = document.getElementById("manager-btn");
         const prestigeButton = document.getElementById("prestige-btn");
-        const baristaButton = document.getElementById("buy-barista");
-        const managerButton = document.getElementById("buy-manager");
-        const foodSector = document.getElementById("food-sector");
-        const sellSalmonBtn = document.getElementById("sell-salmon-btn");
-
-        // Dynamic Inventory UI Setup
         const body = document.body;
-        const inventoryDiv = document.createElement("div");
-        inventoryDiv.className = "stats-bar"; 
-        body.insertBefore(inventoryDiv, document.getElementById('shop-header'));
 
-        // --- FIXED PRESTIGE CONFIGURATION ---
         function getPrestigeCost() {
-          if (goldenBadges === 0) return 5000000;   
-          if (goldenBadges === 1) return 15000000;  
-          if (goldenBadges === 2) return 30000000;  
-          if (goldenBadges === 3) return 50000000;   // Prestige 4 = 50 Million
-          if (goldenBadges === 4) return 100000000;  // Prestige 5 = 100 Million
-          return Infinity;                           // Prestige 6 Teaser Lock
+          if (goldenBadges === 0) return 10000000;
+          if (goldenBadges === 1) return 50000000;
+          if (goldenBadges === 2) return 250000000;
+          if (goldenBadges === 3) return 1000000000;
+          if (goldenBadges === 4) return 5000000000;
+          return Infinity;
         }
 
-        // --- CORE ENGINE RENDERING ---
         function updateDisplay() {
           coinCountDisplay.textContent = Math.floor(userCoins).toLocaleString();
-          prestigeDisplay.textContent = `🥇 Golden Cat Badges: ${goldenBadges}`;
+          badgesDisplay.textContent = goldenBadges;
+          
+          document.getElementById("owned-lattes").textContent = inventory.lattes;
           
           const maxCupcakes = factoryPurchased ? 500 : 200;
-          const maxSalmon = salmonVaultPurchased ? 450 : 50; 
+          document.getElementById("owned-cupcakes").textContent = `${inventory.cupcakes}/${maxCupcakes}`;
           
+          const maxSalmon = salmonVaultPurchased ? 450 : 50;
+          document.getElementById("owned-salmon").textContent = `${inventory.salmon}/${maxSalmon}`;
+
           let basePassive = (inventory.cupcakes * 5) + (inventory.salmon * 500);
           let prestigeBonusMultiplier = 1 + (goldenBadges * 0.5);
-          let totalPassive = Math.round(basePassive * prestigeBonusMultiplier);
-          
+          let rawIncome = Math.round(basePassive * prestigeBonusMultiplier);
+          if (logisticCenterBuilt) rawIncome += 5000;
+          passiveIncomeDisplay.textContent = rawIncome.toLocaleString();
+
+          // Button Layout Updates
+          if (!factoryResearched) {
+            upgradeButton.textContent = "Research (50k)"; upgradeButton.className = "btn-upgrade";
+          } else if (factoryResearched && !factoryPurchased) {
+            upgradeButton.textContent = "Buy (1M)"; upgradeButton.className = "btn-upgrade";
+          } else {
+            upgradeButton.textContent = "Factory Built"; upgradeButton.className = "btn-upgrade purchased";
+          }
+
+          if (!salmonVaultResearched) {
+            salmonStorageBtn.textContent = "Research (2M)"; salmonStorageBtn.className = "btn-upgrade";
+          } else if (salmonVaultResearched && !salmonVaultPurchased) {
+            salmonStorageBtn.textContent = "Buy (10M)"; salmonStorageBtn.className = "btn-upgrade";
+          } else {
+            salmonStorageBtn.textContent = "Vault Built"; salmonStorageBtn.className = "btn-upgrade purchased";
+          }
+
           if (logisticCenterBuilt) {
-            totalPassive += 5000;
+            p4BuildBtn.textContent = "Active"; p4BuildBtn.className = "btn-upgrade purchased";
+          } else {
+            p4BuildBtn.textContent = "Build (25M)"; p4BuildBtn.className = "btn-upgrade";
           }
+
+          baristaButton.textContent = hiredBarista ? "Hired" : "Hire (250k)";
+          if (hiredBarista) baristaButton.className = "btn-upgrade purchased";
           
-          if (goldenBadges >= 1) {
-            foodSector.style.display = "flex";
-            sellSalmonBtn.style.display = "inline-block";
-            salmonStorageBtn.style.display = "block"; 
-            
-            inventoryDiv.innerHTML = `
-              <h3>🎒 My Backpack Storage</h3>
-              <p>☕ Lattes Owned: ${inventory.lattes}</p>
-              <p>🧁 Cupcakes Owned: ${inventory.cupcakes} / ${maxCupcakes}</p>
-              <p style="color: #ff7675; font-weight: bold;">🐟 Salam Salmon Owned: ${inventory.salmon} / ${maxSalmon}</p>
-              <p style="font-size: 14px; color: #ffaa00; font-weight: bold;">💤 Total Income: +${totalPassive.toLocaleString()} Coins/sec ${logisticCenterBuilt ? '(🏢 Tower Bonus Active)' : ''}</p>
-            `;
-          } else {
-            foodSector.style.display = "none";
-            sellSalmonBtn.style.display = "none";
-            salmonStorageBtn.style.display = "none";
-            inventoryDiv.innerHTML = `
-              <h3>🎒 My Backpack Storage</h3>
-              <p>☕ Lattes Owned: ${inventory.lattes}</p>
-              <p>🧁 Cupcakes Owned: ${inventory.cupcakes} / ${maxCupcakes}</p>
-              <p style="font-size: 14px; color: #ffaa00; font-weight: bold;">💤 Total Income: +${totalPassive.toLocaleString()} Coins/sec</p>
-            `;
-          }
+          managerButton.textContent = hiredManager ? "Hired" : "Hire (1M)";
+          if (hiredManager) managerButton.className = "btn-upgrade purchased";
 
-          if (goldenBadges >= 4) {
-            p4FacilityZone.style.display = "block";
-            if (logisticCenterBuilt) {
-              p4BuildBtn.textContent = "🏢 Logistic Center Fully Operational! (+5,000/s)";
-              p4BuildBtn.style.backgroundColor = "#2ecc71";
-              p4BuildBtn.style.color = "#fff";
-              p4BuildBtn.disabled = true;
-            } else {
-              p4BuildBtn.textContent = "🏢 Establish Logistic Center (25,000,000 Coins)";
-              p4BuildBtn.style.backgroundColor = "#f1c40f";
-              p4BuildBtn.disabled = false;
-            }
-          } else {
-            p4FacilityZone.style.display = "none";
-          }
-
-          if (factoryPurchased) {
-            upgradeButton.textContent = "🏭 Factory Operational (Max Cap: 500)";
-            upgradeButton.style.backgroundColor = "#2ecc71";
-            upgradeButton.disabled = true;
-          } else if (factoryResearched) {
-            upgradeButton.textContent = "🏭 Buy Factory (1,000,000 Coins)";
-            upgradeButton.style.backgroundColor = "#e67e22";
-            upgradeButton.disabled = false;
-          } else {
-            upgradeButton.textContent = "🔬 Research Factory (50,000 Coins)";
-            upgradeButton.style.backgroundColor = "#9b59b6";
-            upgradeButton.disabled = false;
-          }
-
-          if (salmonVaultPurchased) {
-            salmonStorageBtn.textContent = "🐟 Salmon Facility Operational (Max Cap: 450)";
-            salmonStorageBtn.style.backgroundColor = "#2ecc71";
-            salmonStorageBtn.disabled = true;
-          } else if (salmonVaultResearched) {
-            salmonStorageBtn.textContent = "🐟 Buy Salmon Facility (10,000,000 Coins)";
-            salmonStorageBtn.style.backgroundColor = "#e67e22";
-            salmonStorageBtn.disabled = false;
-          } else {
-            salmonStorageBtn.textContent = "🐟 Research Salmon Facility (2,000,000 Coins)";
-            salmonStorageBtn.style.backgroundColor = "#e74c3c";
-            salmonStorageBtn.disabled = false;
-          }
-
-          if (hiredBarista) {
-            baristaButton.textContent = "☕ Barista Cat Active";
-            baristaButton.style.backgroundColor = "#7f8c8d";
-            baristaButton.disabled = true;
-          }
-          if (hiredManager) {
-            managerButton.textContent = "👔 Manager Cat Active";
-            managerButton.style.backgroundColor = "#7f8c8d";
-            managerButton.disabled = true;
-          }
-
-          // --- COMING SOON PRESTIGE 5 CONTROL ---
           const currentPrestigeCost = getPrestigeCost();
           if (goldenBadges >= 5) {
-            prestigeButton.textContent = "🚀 Prestige 6 Upgrade Coming Soon!";
-            prestigeButton.style.backgroundColor = "#e74c3c";
-            prestigeButton.style.cursor = "not-allowed";
-            prestigeButton.disabled = true;
-          } else if (userCoins >= currentPrestigeCost) {
-            prestigeButton.textContent = `🌌 Trigger Cosmic Prestige! (Cost: ${currentPrestigeCost.toLocaleString()})`;
-            prestigeButton.style.backgroundColor = "#9b59b6";
-            prestigeButton.style.cursor = "pointer";
-            prestigeButton.disabled = false;
+            prestigeButton.textContent = "Maximum Ascension Achieved!";
           } else {
-            prestigeButton.textContent = `🌌 Cosmic Prestige Locked (${currentPrestigeCost.toLocaleString()} Coins)`;
-            prestigeButton.style.backgroundColor = "#34495e";
-            prestigeButton.style.cursor = "not-allowed";
-            prestigeButton.disabled = true;
+            prestigeButton.textContent = `Reset for Golden Cat Badge (Cost: ${currentPrestigeCost.toLocaleString()})`;
           }
-
-          // Save to LocalStorage
-          localStorage.setItem("jutaJutaCoins", userCoins);
-          localStorage.setItem("goldenBadges", goldenBadges);
-          localStorage.setItem("cafeInventory", JSON.stringify(inventory));
-          localStorage.setItem("factoryResearched", factoryResearched);
-          localStorage.setItem("factoryPurchased", factoryPurchased);
-          localStorage.setItem("salmonVaultResearched", salmonVaultResearched);
-          localStorage.setItem("salmonVaultPurchased", salmonVaultPurchased);
-          localStorage.setItem("logisticCenterBuilt", logisticCenterBuilt);
-          localStorage.setItem("hiredBarista", hiredBarista);
-          localStorage.setItem("hiredManager", hiredManager);
         }
 
-        // --- BUTTON ACTIONS ---
         function executeWorkShift() {
-          userCoins += 50;
+          let reward = 25; 
+          let prestigeBonusMultiplier = 1 + (goldenBadges * 0.5);
+          userCoins += Math.round(reward * prestigeBonusMultiplier);
           updateDisplay();
         }
 
         workButton.addEventListener("click", () => {
           executeWorkShift();
-          workButton.disabled = true;
-          workButton.style.backgroundColor = "#888888";
-          let secondsLeft = 5;
-          workButton.textContent = `⏳ Wait ${secondsLeft}s...`;
-
-          const countdown = setInterval(() => {
-            secondsLeft--;
-            if (secondsLeft > 0) {
-              workButton.textContent = `⏳ Wait ${secondsLeft}s...`;
-            } else {
-              clearInterval(countdown);
-              workButton.disabled = false;
-              workButton.style.backgroundColor = "#2ed573";
-              workButton.textContent = "💼 Work at Café (+50 Coins)";
-            }
-          }, 1000);
+          workButton.style.transform = "scale(0.95)";
+          setTimeout(() => { workButton.style.transform = "scale(1)"; }, 50);
         });
 
         buyButtons.forEach(button => {
@@ -403,20 +267,14 @@
 
             if (userCoins >= itemPrice) {
               if (itemName.includes("Latte")) {
-                userCoins -= itemPrice;
-                inventory.lattes++;
-                updateDisplay();
+                userCoins -= itemPrice; inventory.lattes++; updateDisplay();
               } else if (itemName.includes("Cupcake")) {
                 if (inventory.cupcakes < maxCupcakes) {
-                  userCoins -= itemPrice;
-                  inventory.cupcakes++;
-                  updateDisplay();
+                  userCoins -= itemPrice; inventory.cupcakes++; updateDisplay();
                 } else { alert("❌ Cupcake storage limit hit! Upgrade to a factory."); }
               } else if (itemName.includes("Salmon")) {
                 if (inventory.salmon < maxSalmon) {
-                  userCoins -= itemPrice;
-                  inventory.salmon++;
-                  updateDisplay();
+                  userCoins -= itemPrice; inventory.salmon++; updateDisplay();
                 } else { alert(`❌ Salmon cooler full! Upgrade storage to expand past ${maxSalmon}.`); }
               }
             } else { alert("❌ Not enough Coins!"); }
@@ -434,9 +292,7 @@
               inventory.cupcakes--; userCoins += payout; updateDisplay();
             } else if (itemType === "salmon" && inventory.salmon > 0) {
               inventory.salmon--; userCoins += payout; updateDisplay();
-            } else {
-              alert(`❌ You don't have any ${itemType}s to sell!`);
-            }
+            } else { alert(`❌ You don't have any ${itemType}s to sell!`); }
           });
         });
 
@@ -445,14 +301,10 @@
           if (totalValue > 0) {
             let bonusValue = totalValue * 2; 
             userCoins += bonusValue;
-            inventory.lattes = 0;
-            inventory.cupcakes = 0;
-            inventory.salmon = 0;
+            inventory.lattes = 0; inventory.cupcakes = 0; inventory.salmon = 0;
             updateDisplay();
             alert(`📦 Supermarket Bulk Deal! You sold everything for ${bonusValue.toLocaleString()} Coins! (2x Bonus applied)`);
-          } else {
-            alert("❌ Your backpack is completely empty. Buy some items first!");
-          }
+          } else { alert("❌ Your backpack is completely empty. Buy some items first!"); }
         });
 
         upgradeButton.addEventListener("click", () => {
@@ -465,29 +317,19 @@
 
         salmonStorageBtn.addEventListener("click", () => {
           if (!salmonVaultResearched && userCoins >= 2000000) {
-            userCoins -= 2000000;
-            salmonVaultResearched = true;
-            updateDisplay();
-            alert("🔬 Salmon Storage Facility blueprints finalized! Ready to purchase structural physical framework.");
+            userCoins -= 2000000; salmonVaultResearched = true; updateDisplay();
+            alert("🔬 Salmon Storage Facility blueprints finalized!");
           } else if (salmonVaultResearched && !salmonVaultPurchased && userCoins >= 10000000) {
-            userCoins -= 10000000;
-            salmonVaultPurchased = true;
-            updateDisplay();
-            alert("🐟 Facility established! Salmon storage thresholds expanded safely to 450 items max!");
-          } else {
-            alert("❌ Insufficient system balances to initialize upgrade processing!");
-          }
+            userCoins -= 10000000; salmonVaultPurchased = true; updateDisplay();
+            alert("🐟 Facility established! Salmon storage expanded to 450 max!");
+          } else { alert("❌ Insufficient balances!"); }
         });
 
         p4BuildBtn.addEventListener("click", () => {
           if (!logisticCenterBuilt && userCoins >= 25000000) {
-            userCoins -= 25000000;
-            logisticCenterBuilt = true;
-            updateDisplay();
-            alert("🏢 Prestige 4 Milestone Met: Logistic Expansion Complete! Permanent +5,000 Coins/sec passive production added to engine infrastructure.");
-          } else {
-            alert("❌ Insufficient funds! You need 25,000,000 Coins to establish this industrial hub.");
-          }
+            userCoins -= 25000000; logisticCenterBuilt = true; updateDisplay();
+            alert("🏢 Prestige 4 Milestone Met: Flat +5,000 Coins/sec passive production added!");
+          } else { alert("❌ Insufficient funds! You need 25,000,000 Coins."); }
         });
 
         baristaButton.addEventListener("click", () => {
@@ -501,33 +343,30 @@
           const currentPrestigeCost = getPrestigeCost();
           if (goldenBadges < 5 && userCoins >= currentPrestigeCost) {
             if (confirm("🌌 Spend coins to trigger an Ascension reset and earn +1 Golden Cat Badge?")) {
-              goldenBadges++;
-              userCoins = 0;
+              goldenBadges++; userCoins = 0;
               inventory = { lattes: 0, cupcakes: 0, salmon: 0 };
-              factoryResearched = false;
-              factoryPurchased = false;
-              salmonVaultResearched = false;
-              salmonVaultPurchased = false;
-              logisticCenterBuilt = false; 
-              hiredBarista = false;
-              hiredManager = false;
+              factoryResearched = false; factoryPurchased = false;
+              salmonVaultResearched = false; salmonVaultPurchased = false;
+              logisticCenterBuilt = false; hiredBarista = false; hiredManager = false;
               updateDisplay();
             }
           }
         });
 
-        // --- GAME SYSTEM TICK LOOPS ---
+        // --- FIXED GAME SYSTEM TICK LOOPS ---
         setInterval(() => {
           let basePassive = (inventory.cupcakes * 5) + (inventory.salmon * 500);
           let prestigeBonusMultiplier = 1 + (goldenBadges * 0.5);
           let rawIncome = Math.round(basePassive * prestigeBonusMultiplier);
-          
-          if (logisticCenterBuilt) {
-            rawIncome += 5000; 
-          }
+          if (logisticCenterBuilt) rawIncome += 5000;
           
           userCoins += rawIncome;
           coinCountDisplay.textContent = Math.floor(userCoins).toLocaleString();
+
+          // ✨ Auto-saves progress to local storage every single second
+          localStorage.setItem("jutaJutaCoins", userCoins);
+          localStorage.setItem("goldenBadges", goldenBadges);
+          localStorage.setItem("cafeInventory", JSON.stringify(inventory));
         }, 1000);
 
         setInterval(() => { if (hiredBarista) executeWorkShift(); }, 5000);
@@ -549,35 +388,16 @@
             if (inventory.salmon > 0) rewardBase += (inventory.salmon * 5000);
             if (hiredManager) rewardBase *= 3;
             
-            userCoins += rewardBase;
-            updateDisplay();
+            userCoins += rewardBase; updateDisplay();
             alert(`🍀 BONUS COINS GAINED: +${rewardBase.toLocaleString()}`);
             catEventBtn.remove();
           });
           setTimeout(() => { if (body.contains(catEventBtn)) catEventBtn.remove(); }, 8000);
         }
-        setInterval(() => { spawnLuckyCat(); }, 30000
-
-        // --- FIXED GAME SYSTEM TICK LOOPS ---
-        setInterval(() => {
-          let basePassive = (inventory.cupcakes * 5) + (inventory.salmon * 500);
-          let prestigeBonusMultiplier = 1 + (goldenBadges * 0.5);
-          let rawIncome = Math.round(basePassive * prestigeBonusMultiplier);
-          
-          if (logisticCenterBuilt) {
-            rawIncome += 5000; 
-          }
-          
-          userCoins += rawIncome;
-          coinCountDisplay.textContent = Math.floor(userCoins).toLocaleString();
-
-          // ✨ FIXED: This line now saves your data every single second!
-          localStorage.setItem("jutaJutaCoins", userCoins);
-        }, 1000);
+        setInterval(() => { spawnLuckyCat(); }, 30000);
 
         // Initialize Engine
         updateDisplay();
     </script>
 </body>
 </html>
-
