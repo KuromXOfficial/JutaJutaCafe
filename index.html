@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juta Juta Cafe Tycoon - Milestone Edition</title>
+    <style>
+        body {
+            background-color: #16192b;
+            color: #fff;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 60px;
+        }
+
+        .stats-bar {
+            border: 3px solid #ff6b00;
+            background-color: #111424;
+            border-radius: 15px;
+            padding: 15px;
+            max-width: 500px;
+            margin: 15px auto;
+            box-shadow: 0 0 15px rgba(255, 107, 0, 0.3);
+            text-align: left;
+        }
+
+        #work-btn {
+            background-color: #2ed573;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px #26af5f;
+        }
+        #work-btn:active:not([disabled]) {
+            transform: translateY(2px);
+            box-shadow: 0 2px #26af5f;
+        }
+
+        .shop-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .shop-card {
+            background-color: #ffffff;
+            color: #222;
+            border-radius: 15px;
+            padding: 15px;
+            width: 200px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            text-align: center;
+            border: 2px solid #ddd;
+        }
+
+        .shop-card h2, .shop-card h3 {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        .shop-card p {
+            font-size: 12px;
+            color: #555;
+            margin: 8px 0;
+        }
+
+        .buy-btn, .sell-btn {
+            background-color: #0084ff;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .buy-btn:hover, .sell-btn:hover { opacity: 0.9; }
+
+        .cat-bg {
+            position: fixed; bottom: 10px; left: 10px; width: 60px; height: 60px;
+            background: url('https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=100&auto=format&fit=crop') no-repeat center/cover;
+            border-radius: 50%; opacity: 0.3; z-index: -1;
+        }
+        .cat-bg2 {
+            position: fixed; bottom: 10px; right: 10px; width: 60px; height: 60px;
+            background: url('https://images.unsplash.com/photo-1533738363-b7f9aef128ce?q=80&w=100&auto=format&fit=crop') no-repeat center/cover;
+            border-radius: 50%; opacity: 0.3; z-index: -1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stats-bar">
+      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <p style="margin:0; font-size: 18px; font-weight:bold;">Balance: <span id="coin-count">0</span> Juta Coins 🪙</p>
+        <p id="prestige-display" style="color: #ffca28; font-weight: bold; margin: 0;">🥇 Badges: 0</p>
+      </div>
+      <button id="work-btn">💼 Work at Café (+50 Coins)</button>
+    </div>
+
+    <h2 id="shop-header" style="text-align: center; color: #fff; margin-top: 20px;">🛒 Buy Café Goods</h2>
+    <div class="shop-container">
+      <div class="shop-card">
+        <h2>Lucky Paw Latte ☕✨</h2>
+        <p>A magical espresso blend topped with a glowing, starlit foam paw print.</p>
+        <p><strong>Price: 100 Coins</strong></p>
+        <button class="buy-btn" data-item="Lucky Paw Latte ☕✨" data-price="100">BUY</button>
+      </div>
+
+      <div class="shop-card">
+        <h2>Star Dust Cupcake 🧁🌟</h2>
+        <p>A fluffy vanilla cupcake topped with cosmic space frosting.</p>
+        <p><strong>Price: 150 Coins</strong></p>
+        <button class="buy-btn" data-item="Star Dust Cupcake 🧁🌟" data-price="150">BUY</button>
+      </div>
+    </div>
+
+    <div id="food-sector" class="shop-container" style="margin-top: 20px; display: none;">
+      <div class="shop-card" style="border: 2px solid #ff7675; background: rgba(255, 118, 117, 0.1); width: 220px;">
+        <h2 style="color: #ff7675;">Salam Salmon 🐟🔥</h2>
+        <p>Premium cosmic salmon seared over a starlight grill. Multiplies data points!</p>
+        <p><strong>Price: 25,000 Coins</strong></p>
+        <button class="buy-btn" data-item="Salam Salmon 🐟🔥" data-price="25000">BUY</button>
+      </div>
+    </div>
+
+    <h2 style="text-align: center; color: #2ecc71; margin-top: 30px;">💰 Wholesaler Market</h2>
+    <div class="stats-bar" style="background: rgba(46, 204, 113, 0.1); border: 2px dashed #2ecc71; text-align: center;">
+      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <button class="sell-btn" data-item="latte" data-payout="50" style="background:#2ecc71;">Sell 1 Latte (+50)</button>
+        <button class="sell-btn" data-item="cupcake" data-payout="75" style="background:#2ecc71;">Sell 1 Cupcake (+75)</button>
+        <button id="sell-salmon-btn" class="sell-btn" data-item="salmon" data-payout="12500" style="background:#e74c3c; display: none;">Sell 1 Salmon (+12.5k)</button>
+      </div>
+      
+      <hr style="margin: 20px 0; border: 0; border-top: 2px solid #2ecc71;">
+      
+      <h3 style="color: #3498db; margin-top: 0;">🛒 Juta Juta Supermarket</h3>
+      <p style="font-size: 13px;">Dump your entire backpack to the mega-stores for a massive 2x bonus payout!</p>
+      <button id="bulk-sell-btn" style="background-color: #3498db; color: white; border: none; padding: 15px; width: 100%; font-weight: bold; cursor: pointer; border-radius: 8px;">
+        BULK SELL EVERYTHING (2x Bonus!)
+      </button>
+    </div>
+
+    <div id="p4-mega-facility-zone" class="stats-bar" style="margin-top: 20px; border-color: #f1c40f; background: rgba(241, 196, 15, 0.05); display: none;">
+      <h3 style="color: #f1c40f; text-align: center; margin-top: 0;">🏢 Prestige 4: Logistic Mega-Center</h3>
+      <p style="font-size: 12px; text-align: center; margin-bottom: 12px;">The ultimate distribution tower. Permanently grants an additional flat +5,000 Coins/sec passive income!</p>
+      <button id="p4-build-btn" style="width: 100%; border: none; padding: 12px; font-weight: bold; border-radius: 6px; cursor: pointer; background-color: #f1c40f; color: #111;">
+        🏗️ Establish Logistic Center (25,000,000 Coins)
+      </button>
+    </div>
+
+    <div class="stats-bar" style="margin-top: 20px;">
+      <h3>🔬 Café Upgrades & Expansion</h3>
+      <button id="upgrade-btn" style="background-color: #9b59b6; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; margin-bottom: 10px; width: 100%;">
+        🔬 Research Factory (50,000 Coins)
+      </button>
+      <button id="salmon-storage-btn" style="background-color: #d63031; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; margin-bottom: 10px; width: 100%; display: none;">
+        🐟 Research Salmon Storage Facility (2,000,000 Coins)
+      </button>
+      <button id="prestige-btn" style="width: 100%; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 16px;">
+        🌌 Cosmic Prestige Locked
+      </button>
+    </div>
+
+    <div class="stats-bar" style="margin-top: 20px;">
+      <h3>🐾 Staff Roster</h3>
+      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <button id="buy-barista" style="background-color: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer;">
+          ☕ Hire Barista Cat (250k Coins)<br><span style="font-size:11px;font-weight:normal;">Auto-works every 5s</span>
+        </button>
+        <button id="buy-manager" style="background-color: #e74c3c; color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer;">
+          👔 Hire Manager Cat (1M Coins)<br><span style="font-size:11px;font-weight:normal;">Triples event drops</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="cat-bg"></div>
+    <div class="cat-bg2"></div>
+
+    <script>
+        // --- GAME VARIABLES ---
+        let userCoins = parseInt(localStorage.getItem("jutaJutaCoins")) || 53705;
+        let goldenBadges = parseInt(localStorage.getItem("goldenBadges")) || 3;
+
+        let inventory = JSON.parse(localStorage.getItem("cafeInventory")) || {
+          lattes: 21,
+          cupcakes: 143,
+          salmon: 0
+        };
+
+        let factoryResearched = localStorage.getItem("factoryResearched") === "true";
+        let factoryPurchased = localStorage.getItem("factoryPurchased") === "true";
+        
+        let salmonVaultResearched = localStorage.getItem("salmonVaultResearched") === "true";
+        let salmonVaultPurchased = localStorage.getItem("salmonVaultPurchased") === "true";
+
+        let logisticCenterBuilt = localStorage.getItem("logisticCenterBuilt") === "true";
+
+        let hiredBarista = localStorage.getItem("hiredBarista") === "true";
+        let hiredManager = localStorage.getItem("hiredManager") === "true";
+
+        // --- DOM ELEMENTS ---
+        const coinCountDisplay = document.getElementById("coin-count");
+        const prestigeDisplay = document.getElementById("prestige-display");
+        const workButton = document.getElementById("work-btn");
+        const buyButtons = document.querySelectorAll(".buy-btn");
+        const sellButtons = document.querySelectorAll(".sell-btn");
+        const bulkSellBtn = document.getElementById("bulk-sell-btn");
+        const upgradeButton = document.getElementById("upgrade-btn");
+        const salmonStorageBtn = document.getElementById("salmon-storage-btn");
+        const p4FacilityZone = document.getElementById("p4-mega-facility-zone");
+        const p4BuildBtn = document.getElementById("p4-build-btn");
+        const prestigeButton = document.getElementById("prestige-btn");
+        const baristaButton = document.getElementById("buy-barista");
+        const managerButton = document.getElementById("buy-manager");
+        const foodSector = document.getElementById("food-sector");
+        const sellSalmonBtn = document.getElementById("sell-salmon-btn");
+
+        // Dynamic Inventory UI Setup
+        const body = document.body;
+        const inventoryDiv = document.createElement("div");
+        inventoryDiv.className = "stats-bar"; 
+        body.insertBefore(inventoryDiv, document.getElementById('shop-header'));
+
+        // --- FIXED PRESTIGE CONFIGURATION ---
+        function getPrestigeCost() {
+          if (goldenBadges === 0) return 5000000;   
+          if (goldenBadges === 1) return 15000000;  
+          if (goldenBadges === 2) return 30000000;  
+          if (goldenBadges === 3) return 50000000;   // Prestige 4 = 50 Million
+          if (goldenBadges === 4) return 100000000;  // Prestige 5 = 100 Million
+          return Infinity;                           // Prestige 6 Teaser Lock
+        }
+
+        // --- CORE ENGINE RENDERING ---
+        function updateDisplay() {
+          coinCountDisplay.textContent = Math.floor(userCoins).toLocaleString();
+          prestigeDisplay.textContent = `🥇 Golden Cat Badges: ${goldenBadges}`;
+          
+          const maxCupcakes = factoryPurchased ? 500 : 200;
+          const maxSalmon = salmonVaultPurchased ? 450 : 50; 
+          
+          let basePassive = (inventory.cupcakes * 5) + (inventory.salmon * 500);
+          let prestigeBonusMultiplier = 1 + (goldenBadges * 0.5);
+          let totalPassive = Math.round(basePassive * prestigeBonusMultiplier);
+          
+          if (logisticCenterBuilt) {
+            totalPassive += 5000;
+          }
+          
+          if (goldenBadges >= 1) {
+            foodSector.style.display = "flex";
+            sellSalmonBtn.style.display = "inline-block";
+            salmonStorageBtn.style.display = "block"; 
+            
+            inventoryDiv.innerHTML = `
+              <h3>🎒 My Backpack Storage</h3>
+              <p>☕ Lattes Owned: ${inventory.lattes}</p>
+              <p>🧁 Cupcakes Owned: ${inventory.cupcakes} / ${maxCupcakes}</p>
+              <p style="color: #ff7675; font-weight: bold;">🐟 Salam Salmon Owned: ${inventory.salmon} / ${maxSalmon}</p>
+              <p style="font-size: 14px; color: #ffaa00; font-weight: bold;">💤 Total Income: +${totalPassive.toLocaleString()} Coins/sec ${logisticCenterBuilt ? '(🏢 Tower Bonus Active)' : ''}</p>
+            `;
+          } else {
+            foodSector.style.display = "none";
+            sellSalmonBtn.style.display = "none";
+            salmonStorageBtn.style.display = "none";
+            inventoryDiv.innerHTML = `
+              <h3>🎒 My Backpack Storage</h3>
+              <p>☕ Lattes Owned: ${inventory.lattes}</p>
+              <p>🧁 Cupcakes Owned: ${inventory.cupcakes} / ${maxCupcakes}</p>
+              <p style="font-size: 14px; color: #ffaa00; font-weight: bold;">💤 Total Income: +${totalPassive.toLocaleString()} Coins/sec</p>
+            `;
+          }
+
+          if (goldenBadges >= 4) {
+            p4FacilityZone.style.display = "block";
+            if (logisticCenterBuilt) {
+              p4BuildBtn.textContent = "🏢 Logistic Center Fully Operational! (+5,000/s)";
+              p4BuildBtn.style.backgroundColor = "#2ecc71";
+              p4BuildBtn.style.color = "#fff";
+              p4BuildBtn.disabled = true;
+            } else {
+              p4BuildBtn.textContent = "🏢 Establish Logistic Center (25,000,000 Coins)";
+              p4BuildBtn.style.backgroundColor = "#f1c40f";
+              p4BuildBtn.disabled = false;
+            }
+          } else {
+            p4FacilityZone.style.display = "none";
+          }
+
+          if (factoryPurchased) {
+            upgradeButton.textContent = "🏭 Factory Operational (Max Cap: 500)";
+            upgradeButton.style.backgroundColor = "#2ecc71";
+            upgradeButton.disabled = true;
+          } else if (factoryResearched) {
+            upgradeButton.textContent = "🏭 Buy Factory (1,000,000 Coins)";
+            upgradeButton.style.backgroundColor = "#e67e22";
+            upgradeButton.disabled = false;
+          } else {
+            upgradeButton.textContent = "🔬 Research Factory (50,000 Coins)";
+            upgradeButton.style.backgroundColor = "#9b59b6";
+            upgradeButton.disabled = false;
+          }
+
+          if (salmonVaultPurchased) {
+            salmonStorageBtn.textContent = "🐟 Salmon Facility Operational (Max Cap: 450)";
+            salmonStorageBtn.style.backgroundColor = "#2ecc71";
+            salmonStorageBtn.disabled = true;
+          } else if (salmonVaultResearched) {
+            salmonStorageBtn.textContent = "🐟 Buy Salmon Facility (10,000,000 Coins)";
+            salmonStorageBtn.style.backgroundColor = "#e67e22";
+            salmonStorageBtn.disabled = false;
+          } else {
+            salmonStorageBtn.textContent = "🐟 Research Salmon Facility (2,000,000 Coins)";
+            salmonStorageBtn.style.backgroundColor = "#e74c3c";
+            salmonStorageBtn.disabled = false;
+          }
+
+          if (hiredBarista) {
+            baristaButton.textContent = "☕ Barista Cat Active";
+            baristaButton.style.backgroundColor = "#7f8c8d";
+            baristaButton.disabled = true;
+          }
+          if (hiredManager) {
+            managerButton.textContent = "👔 Manager Cat Active";
+            managerButton.style.backgroundColor = "#7f8c8d";
+            managerButton.disabled = true;
+          }
+
+          // --- COMING SOON PRESTIGE 5 CONTROL ---
+          const currentPrestigeCost = getPrestigeCost();
+          if (goldenBadges >= 5) {
+            prestigeButton.textContent = "🚀 Prestige 6 Upgrade Coming Soon!";
+            prestigeButton.style.backgroundColor = "#e74c3c";
+            prestigeButton.style.cursor = "not-allowed";
+            prestigeButton.disabled = true;
+          } else if (userCoins >= currentPrestigeCost) {
+            prestigeButton.textContent = `🌌 Trigger Cosmic Prestige! (Cost: ${currentPrestigeCost.toLocaleString()})`;
+            prestigeButton.style.backgroundColor = "#9b59b6";
+            prestigeButton.style.cursor = "pointer";
+            prestigeButton.disabled = false;
+          } else {
+            prestigeButton.textContent = `🌌 Cosmic Prestige Locked (${currentPrestigeCost.toLocaleString()} Coins)`;
+            prestigeButton.style.backgroundColor = "#34495e";
+            prestigeButton.style.cursor = "not-allowed";
+            prestigeButton.disabled = true;
+          }
+
+          // Save to LocalStorage
+          localStorage.setItem("jutaJutaCoins", userCoins);
+          localStorage.setItem("goldenBadges", goldenBadges);
+          localStorage.setItem("cafeInventory", JSON.stringify(inventory));
+          localStorage.setItem("factoryResearched", factoryResearched);
+          localStorage.setItem("factoryPurchased", factoryPurchased);
+          localStorage.setItem("salmonVaultResearched", salmonVaultResearched);
+          localStorage.setItem("salmonVaultPurchased", salmonVaultPurchased);
+          localStorage.setItem("logisticCenterBuilt", logisticCenterBuilt);
+          localStorage.setItem("hiredBarista", hiredBarista);
+          localStorage.setItem("hiredManager", hiredManager);
+        }
+
+        // --- BUTTON ACTIONS ---
+        function executeWorkShift() {
+          userCoins += 50;
+          updateDisplay();
+        }
+
+        workButton.addEventListener("click", () => {
+          executeWorkShift();
+          workButton.disabled = true;
+          workButton.style.backgroundColor = "#888888";
+          let secondsLeft = 5;
+          workButton.textContent = `⏳ Wait ${secondsLeft}s...`;
+
+          const countdown = setInterval(() => {
+            secondsLeft--;
+            if (secondsLeft > 0) {
+              workButton.textContent = `⏳ Wait ${secondsLeft}s...`;
+            } else {
+              clearInterval(countdown);
+              workButton.disabled = false;
+              workButton.style.backgroundColor = "#2ed573";
+              workButton.textContent = "💼 Work at Café (+50 Coins)";
+            }
+          }, 1000);
+        });
+
+        buyButtons.forEach(button => {
+          button.addEventListener("click", () => {
+            const itemName = button.getAttribute("data-item");
+            const itemPrice = parseInt(button.getAttribute("data-price"));
+            const maxCupcakes = factoryPurchased ? 500 : 200;
+            const maxSalmon = salmonVaultPurchased ? 450 : 50;
+
+            if (userCoins >= itemPrice) {
+              if (itemName.includes("Latte")) {
+                userCoins -= itemPrice;
+                inventory.lattes++;
+                updateDisplay();
+              } else if (itemName.includes("Cupcake")) {
+                if (inventory.cupcakes < maxCupcakes) {
+                  userCoins -= itemPrice;
+                  inventory.cupcakes++;
+                  updateDisplay();
+                } else { alert("❌ Cupcake storage limit hit! Upgrade to a factory."); }
+              } else if (itemName.includes("Salmon")) {
+                if (inventory.salmon < maxSalmon) {
+                  userCoins -= itemPrice;
+                  inventory.salmon++;
+                  updateDisplay();
+                } else { alert(`❌ Salmon cooler full! Upgrade storage to expand past ${maxSalmon}.`); }
+              }
+            } else { alert("❌ Not enough Coins!"); }
+          });
+        });
+
+        sellButtons.forEach(button => {
+          button.addEventListener("click", () => {
+            const itemType = button.getAttribute("data-item");
+            const payout = parseInt(button.getAttribute("data-payout"));
+
+            if (itemType === "latte" && inventory.lattes > 0) {
+              inventory.lattes--; userCoins += payout; updateDisplay();
+            } else if (itemType === "cupcake" && inventory.cupcakes > 0) {
+              inventory.cupcakes--; userCoins += payout; updateDisplay();
+            } else if (itemType === "salmon" && inventory.salmon > 0) {
+              inventory.salmon--; userCoins += payout; updateDisplay();
+            } else {
+              alert(`❌ You don't have any ${itemType}s to sell!`);
+            }
+          });
+        });
+
+        bulkSellBtn.addEventListener("click", () => {
+          let totalValue = (inventory.lattes * 50) + (inventory.cupcakes * 75) + (inventory.salmon * 12500);
+          if (totalValue > 0) {
+            let bonusValue = totalValue * 2; 
+            userCoins += bonusValue;
+            inventory.lattes = 0;
+            inventory.cupcakes = 0;
+            inventory.salmon = 0;
+            updateDisplay();
+            alert(`📦 Supermarket Bulk Deal! You sold everything for ${bonusValue.toLocaleString()} Coins! (2x Bonus applied)`);
+          } else {
+            alert("❌ Your backpack is completely empty. Buy some items first!");
+          }
+        });
+
+        upgradeButton.addEventListener("click", () => {
+          if (!factoryResearched && userCoins >= 50000) {
+            userCoins -= 50000; factoryResearched = true; updateDisplay();
+          } else if (factoryResearched && !factoryPurchased && userCoins >= 1000000) {
+            userCoins -= 1000000; factoryPurchased = true; updateDisplay();
+          }
+        });
+
+        salmonStorageBtn.addEventListener("click", () => {
+          if (!salmonVaultResearched && userCoins >= 2000000) {
+            userCoins -= 2000000;
+            salmonVaultResearched = true;
+            updateDisplay();
+            alert("🔬 Salmon Storage Facility blueprints finalized! Ready to purchase structural physical framework.");
+          } else if (salmonVaultResearched && !salmonVaultPurchased && userCoins >= 10000000) {
+            userCoins -= 10000000;
+            salmonVaultPurchased = true;
+            updateDisplay();
+            alert("🐟 Facility established! Salmon storage thresholds expanded safely to 450 items max!");
+          } else {
+            alert("❌ Insufficient system balances to initialize upgrade processing!");
+          }
+        });
+
+        p4BuildBtn.addEventListener("click", () => {
+          if (!logisticCenterBuilt && userCoins >= 25000000) {
+            userCoins -= 25000000;
+            logisticCenterBuilt = true;
+            updateDisplay();
+            alert("🏢 Prestige 4 Milestone Met: Logistic Expansion Complete! Permanent +5,000 Coins/sec passive production added to engine infrastructure.");
+          } else {
+            alert("❌ Insufficient funds! You need 25,000,000 Coins to establish this industrial hub.");
+          }
+        });
+
+        baristaButton.addEventListener("click", () => {
+          if (userCoins >= 250000) { userCoins -= 250000; hiredBarista = true; updateDisplay(); }
+        });
+        managerButton.addEventListener("click", () => {
+          if (userCoins >= 1000000) { userCoins -= 1000000; hiredManager = true; updateDisplay(); }
+        });
+
+        prestigeButton.addEventListener("click", () => {
+          const currentPrestigeCost = getPrestigeCost();
+          if (goldenBadges < 5 && userCoins >= currentPrestigeCost) {
+            if (confirm("🌌 Spend coins to trigger an Ascension reset and earn +1 Golden Cat Badge?")) {
+              goldenBadges++;
+              userCoins = 0;
+              inventory = { lattes: 0, cupcakes: 0, salmon: 0 };
+              factoryResearched = false;
+              factoryPurchased = false;
+              salmonVaultResearched = false;
+              salmonVaultPurchased = false;
+              logisticCenterBuilt = false; 
+              hiredBarista = false;
+              hiredManager = false;
+              updateDisplay();
+            }
+          }
+        });
+
+        // --- GAME SYSTEM TICK LOOPS ---
+        setInterval(() => {
+          let basePassive = (inventory.cupcakes * 5) + (inventory.salmon * 500);
+          let prestigeBonusMultiplier = 1 + (goldenBadges * 0.5);
+          let rawIncome = Math.round(basePassive * prestigeBonusMultiplier);
+          
+          if (logisticCenterBuilt) {
+            rawIncome += 5000; 
+          }
+          
+          userCoins += rawIncome;
+          coinCountDisplay.textContent = Math.floor(userCoins).toLocaleString();
+        }, 1000);
+
+        setInterval(() => { if (hiredBarista) executeWorkShift(); }, 5000);
+
+        function spawnLuckyCat() {
+          if (document.getElementById("lucky-cat-btn")) return; 
+          
+          const catEventBtn = document.createElement("button");
+          catEventBtn.id = "lucky-cat-btn";
+          catEventBtn.innerHTML = "🐱✨ LUCKY CAT BONUS! ✨🐾";
+          catEventBtn.style.position = "fixed"; catEventBtn.style.top = "40%"; catEventBtn.style.left = "50%";
+          catEventBtn.style.transform = "translate(-50%, -50%)"; catEventBtn.style.backgroundColor = "#ff4757";
+          catEventBtn.style.color = "white"; catEventBtn.style.padding = "20px 30px"; catEventBtn.style.borderRadius = "50px";
+          catEventBtn.style.fontWeight = "bold"; catEventBtn.style.cursor = "pointer"; catEventBtn.style.zIndex = "9999";
+          body.appendChild(catEventBtn);
+
+          catEventBtn.addEventListener("click", () => {
+            let rewardBase = inventory.cupcakes > 0 ? (inventory.cupcakes * 250) : 5000;
+            if (inventory.salmon > 0) rewardBase += (inventory.salmon * 5000);
+            if (hiredManager) rewardBase *= 3;
+            
+            userCoins += rewardBase;
+            updateDisplay();
+            alert(`🍀 BONUS COINS GAINED: +${rewardBase.toLocaleString()}`);
+            catEventBtn.remove();
+          });
+          setTimeout(() => { if (body.contains(catEventBtn)) catEventBtn.remove(); }, 8000);
+        }
+        setInterval(() => { spawnLuckyCat(); }, 30000);
+
+        // Initialize Engine
+        updateDisplay();
+    </script>
+</body>
+</html>
