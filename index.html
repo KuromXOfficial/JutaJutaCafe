@@ -16,7 +16,7 @@
         .stat-value { font-size: 1.4rem; font-weight: 700; color: #2f3640; }
         .stat-card.full-width .stat-value { color: #6c5ce7; font-size: 1.8rem; }
         .main-action { width: 100%; max-width: 500px; margin-bottom: 15px; }
-        .btn-work { width: 100%; background: #4cd137; color: white; border: none; padding: 18px; font-size: 1.3rem; font-weight: 700; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 12px rgba(76,209,55,0.3); transition: transform 0.1s; }
+        .btn-work { width: 100%; background: #4cd137; color: white; border: none; padding: 18px; font-size: 1.3rem; font-weight: 700; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 12px rgba(76,209,55,0.3); transition: transform 0.1s; text-align: center; }
         .btn-work:active { transform: scale(0.98); }
         .section-title { width: 100%; max-width: 500px; font-size: 1.1rem; font-weight: 700; margin: 10px 0 8px 5px; color: #718093; text-transform: uppercase; letter-spacing: 0.5px; }
         .scroll-container { width: 100%; max-width: 500px; display: flex; gap: 10px; overflow-x: auto; padding: 5px 5px 12px 5px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
@@ -252,7 +252,29 @@
           updateDisplay();
         }
 
+        // 💥 ANTI-AUTOCLICKER SYSTEM ENGAGED 💥
+        let lastClickTime = 0;
+        let isOverheated = false;
+
         workButton.addEventListener("click", () => {
+          if (isOverheated) return;
+
+          const currentTime = Date.now();
+          // If interval between clicks is less than 90 milliseconds, trigger anti-cheat freeze
+          if (currentTime - lastClickTime < 90) { 
+            isOverheated = true;
+            workButton.textContent = "⚠️ MACHINE OVERHEATED! (Wait 3s)";
+            workButton.style.background = "#e84118"; 
+            
+            setTimeout(() => {
+              isOverheated = false;
+              workButton.textContent = "Brew Espresso Manually";
+              workButton.style.background = "#4cd137"; 
+            }, 3000); 
+            return;
+          }
+          
+          lastClickTime = currentTime;
           executeWorkShift();
           workButton.style.transform = "scale(0.95)";
           setTimeout(() => { workButton.style.transform = "scale(1)"; }, 50);
@@ -353,7 +375,7 @@
           }
         });
 
-        // --- FIXED GAME SYSTEM TICK LOOPS ---
+        // --- FULL AUTOMATION SAVING SYSTEM ---
         setInterval(() => {
           let basePassive = (inventory.cupcakes * 5) + (inventory.salmon * 500);
           let prestigeBonusMultiplier = 1 + (goldenBadges * 0.5);
@@ -363,7 +385,7 @@
           userCoins += rawIncome;
           coinCountDisplay.textContent = Math.floor(userCoins).toLocaleString();
 
-          // ✨ Auto-saves progress to local storage every single second
+          // Saves everything reliably every single second
           localStorage.setItem("jutaJutaCoins", userCoins);
           localStorage.setItem("goldenBadges", goldenBadges);
           localStorage.setItem("cafeInventory", JSON.stringify(inventory));
