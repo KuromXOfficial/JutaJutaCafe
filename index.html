@@ -252,33 +252,56 @@
           updateDisplay();
         }
 
-        // 💥 ANTI-AUTOCLICKER SYSTEM ENGAGED 💥
+        // 🛡️ INDUSTRIAL-GRADE ANTI-AUTOCLICKER 🛡️
         let lastClickTime = 0;
+        let lastInterval = 0;
+        let identicalIntervalCount = 0;
         let isOverheated = false;
 
         workButton.addEventListener("click", () => {
           if (isOverheated) return;
 
           const currentTime = Date.now();
-          // If interval between clicks is less than 90 milliseconds, trigger anti-cheat freeze
-          if (currentTime - lastClickTime < 90) { 
-            isOverheated = true;
-            workButton.textContent = "⚠️ MACHINE OVERHEATED! (Wait 3s)";
-            workButton.style.background = "#e84118"; 
-            
-            setTimeout(() => {
-              isOverheated = false;
-              workButton.textContent = "Brew Espresso Manually";
-              workButton.style.background = "#4cd137"; 
-            }, 3000); 
+          const currentInterval = currentTime - lastClickTime;
+
+          // 1. Hard speed limit check (Too fast)
+          if (currentInterval < 80) {
+            triggerOverheat();
             return;
           }
+
+          // 2. Pattern analysis check (Perfect robot timing)
+          // Allows small variations (+/- 1ms) because browser loops can jitter slightly
+          if (Math.abs(currentInterval - lastInterval) <= 1) {
+            identicalIntervalCount++;
+            if (identicalIntervalCount >= 3) { 
+              triggerOverheat();
+              return;
+            }
+          } else {
+            identicalIntervalCount = 0; // Reset count if a human breaks the rhythm
+          }
           
+          lastInterval = currentInterval;
           lastClickTime = currentTime;
+          
           executeWorkShift();
           workButton.style.transform = "scale(0.95)";
           setTimeout(() => { workButton.style.transform = "scale(1)"; }, 50);
         });
+
+        function triggerOverheat() {
+          isOverheated = true;
+          identicalIntervalCount = 0;
+          workButton.textContent = "⚠️ BOT DETECTION OUTAGE (Wait 5s)";
+          workButton.style.background = "#e84118"; 
+          
+          setTimeout(() => {
+            isOverheated = false;
+            workButton.textContent = "Brew Espresso Manually";
+            workButton.style.background = "#4cd137"; 
+          }, 5000); // Punish them with a full 5 seconds lock
+        }
 
         buyButtons.forEach(button => {
           button.addEventListener("click", () => {
@@ -385,7 +408,6 @@
           userCoins += rawIncome;
           coinCountDisplay.textContent = Math.floor(userCoins).toLocaleString();
 
-          // Saves everything reliably every single second
           localStorage.setItem("jutaJutaCoins", userCoins);
           localStorage.setItem("goldenBadges", goldenBadges);
           localStorage.setItem("cafeInventory", JSON.stringify(inventory));
